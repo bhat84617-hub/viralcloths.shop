@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Thank You - ViralClothes.Shop</title>
+  <meta name="description" content="Thank you for your order at ViralClothes.Shop">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <meta property="og:title" content="Thank You - ViralClothes.Shop">
+  <meta property="og:description" content="Thank you for your order at ViralClothes.Shop">
+  <meta property="og:image" content="/assets/og-image.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Thank You - ViralClothes.Shop">
+  <meta name="twitter:description" content="Thank you for your order at ViralClothes.Shop">
+  <meta name="twitter:image" content="/assets/og-image.jpg">
+  <link rel="canonical" href="/thank-you.html">
+  <meta name="robots" content="noindex, follow">
+  <link rel="manifest" href="/seo/manifest.json">
+  <meta name="theme-color" content="#1a1a2e">
+  <script id="seo-data" type="application/json">{"title":"Thank You - ViralClothes.Shop","description":"Thank you for your order at ViralClothes.Shop","ogImage":"/assets/og-image.jpg","ogType":"website","robots":"noindex, follow"}</script>
+  <script src="js/seo.js" defer></script>
+</head>
+<body>
+<div class="bg-animation"><span></span><span></span><span></span><span></span></div>
+<header id="header">
+  <a href="index.html" class="logo"><i class="fas fa-crown"></i> VIRAL<span>CLOTHES.SHOP</span></a>
+  <nav>
+    <a href="index.html">Home</a><a href="collection.html">Shop</a><a href="about.html">About</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
+  </nav>
+  <div class="header-actions">
+    <i class="fas fa-search" onclick="window.location.href='search.html'"></i>
+    <a href="wishlist.html"><i class="fas fa-heart"></i></a>
+    <div class="cart-btn" onclick="toggleCart()"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCount">0</span></div>
+    <div class="hamburger" onclick="document.querySelector('nav').classList.toggle('open')"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<section>
+  <div class="success-page">
+    <div class="success-icon" style="background:var(--gradient3);box-shadow:0 20px 60px rgba(0,210,255,0.3)"><i class="fas fa-heart"></i></div>
+    <h1>Thank You!</h1>
+    <p>We truly appreciate your support. Your order means the world to us and we can't wait for you to rock our gear!</p>
+    <div class="order-details">
+      <h3>What's Next?</h3>
+      <p style="color:rgba(255,255,255,0.6);line-height:1.8;font-size:14px">You'll receive a confirmation email with your order details and tracking information once your package ships. In the meantime, check out our latest arrivals or follow us on social media for exclusive updates and deals.</p>
+    </div>
+    <div class="action-buttons">
+      <a href="collection.html" class="btn btn-primary">Shop New Arrivals <i class="fas fa-arrow-right"></i></a>
+      <a href="index.html" class="btn btn-secondary">Back to Home <i class="fas fa-home"></i></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <a href="index.html" class="logo" style="font-size:22px;margin-bottom:15px;display:inline-block;"><i class="fas fa-crown"></i> VIRAL<span style="font-size:10px;display:block;-webkit-text-fill-color:initial;color:rgba(255,255,255,0.5);">CLOTHES.SHOP</span></a>
+      <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;">Your destination for premium streetwear and fashion.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a><a href="collection.html">Shop All</a><a href="collection.html?category=new">New Arrivals</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="faq.html">FAQ</a><a href="shipping-policy.html">Shipping Info</a><a href="refund-policy.html">Returns</a><a href="contact.html">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Policies</h4>
+      <a href="privacy-policy.html">Privacy Policy</a><a href="terms-conditions.html">Terms &amp; Conditions</a><a href="refund-policy.html">Refund Policy</a><a href="shipping-policy.html">Shipping Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 ViralClothes.Shop &mdash; All Rights Reserved. Made with ❤️</p></div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

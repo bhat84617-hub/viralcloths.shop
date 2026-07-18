@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Checkout - ViralClothes.Shop</title>
+  <meta name="description" content="Secure checkout at ViralClothes.Shop">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .checkout-steps { display:flex; gap:0; margin:30px 0; overflow-x:auto; padding:0 0 10px }
+    .checkout-step { flex:1; text-align:center; padding:12px 8px; background:rgba(255,255,255,0.03); border-bottom:3px solid rgba(255,255,255,0.1); position:relative; font-size:12px; min-width:80px }
+    .checkout-step.active { border-bottom-color:#6C3CE1; background:rgba(108,60,225,0.08); font-weight:700 }
+    .checkout-step.done { border-bottom-color:#00D2FF; background:rgba(0,210,255,0.05) }
+    .checkout-step .step-num { display:inline-block; width:24px; height:24px; line-height:24px; border-radius:50%; background:rgba(255,255,255,0.1); text-align:center; margin-bottom:4px; font-size:11px }
+    .checkout-step.active .step-num { background:#6C3CE1 }
+    .checkout-step.done .step-num { background:#00D2FF }
+    .step-content { display:none }
+    .step-content.active { display:block }
+    .saved-address { cursor:pointer; padding:12px; border:1px solid rgba(255,255,255,0.1); border-radius:8px; margin-bottom:8px; transition:.2s }
+    .saved-address:hover,.saved-address.selected { border-color:#6C3CE1; background:rgba(108,60,225,0.08) }
+    .shipping-option { cursor:pointer; padding:15px; border:1px solid rgba(255,255,255,0.1); border-radius:8px; margin-bottom:8px; transition:.2s; display:flex; align-items:center; gap:12px }
+    .shipping-option:hover,.shipping-option.selected { border-color:#6C3CE1; background:rgba(108,60,225,0.08) }
+    .shipping-option input[type=radio] { accent-color:#6C3CE1 }
+    .payment-option { cursor:pointer; padding:15px; border:1px solid rgba(255,255,255,0.1); border-radius:8px; transition:.2s; display:flex; align-items:center; gap:12px }
+    .payment-option:hover,.payment-option.selected { border-color:#6C3CE1; background:rgba(108,60,225,0.08) }
+    .review-item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); align-items:center }
+    .review-item-img { width:50px;height:50px;border-radius:8px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:24px }
+    .review-section { margin:20px 0; padding:15px; background:rgba(255,255,255,0.03); border-radius:8px }
+    #card-element { padding:15px; background:rgba(255,255,255,0.05); border-radius:8px; margin:10px 0; border:1px solid rgba(255,255,255,0.1) }
+    .stripe-error { color:#FF6B6B; font-size:13px; margin-top:6px; display:none }
+    .paypal-button-container { margin:15px 0 }
+    .coupon-row,.giftcard-row { display:flex; gap:8px; margin:10px 0 }
+    .coupon-row input,.giftcard-row input { flex:1 }
+    #cartItems.cart-items-checkout .cart-item { background:rgba(255,255,255,0.03); border-radius:8px; padding:10px; margin-bottom:8px }
+    @media(max-width:768px){ .checkout-steps { gap:2px } .checkout-step { font-size:10px; padding:10px 4px; min-width:50px } .checkout-step .step-label { display:none } }
+  </style>
+  <meta property="og:title" content="Checkout - ViralClothes.Shop">
+  <meta property="og:description" content="Complete your purchase at ViralClothes.Shop.">
+  <meta property="og:image" content="/assets/og-image.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Checkout - ViralClothes.Shop">
+  <meta name="twitter:description" content="Complete your purchase at ViralClothes.Shop.">
+  <meta name="twitter:image" content="/assets/og-image.jpg">
+  <link rel="canonical" href="/checkout.html">
+  <meta name="robots" content="noindex, follow">
+  <link rel="manifest" href="/seo/manifest.json">
+  <meta name="theme-color" content="#1a1a2e">
+  <script id="seo-data" type="application/json">{"title":"Checkout - ViralClothes.Shop","description":"Complete your purchase at ViralClothes.Shop.","ogImage":"/assets/og-image.jpg","ogType":"website","robots":"noindex, follow"}</script>
+  <script src="js/seo.js" defer></script>
+</head>
+<body>
+<div class="bg-animation"><span></span><span></span><span></span><span></span></div>
+<header id="header" style="background:rgba(26,26,46,0.98)">
+  <a href="index.html" class="logo"><i class="fas fa-crown"></i> VIRAL<span>CLOTHES.SHOP</span></a>
+  <nav>
+    <a href="index.html">Home</a><a href="collection.html">Shop</a><a href="about.html">About</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
+  </nav>
+  <div class="header-actions">
+    <i class="fas fa-search" onclick="window.location.href='search.html'"></i>
+    <a href="wishlist.html"><i class="fas fa-heart"></i></a>
+    <div class="cart-btn" onclick="toggleCart()"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCount">0</span></div>
+    <div class="hamburger" onclick="document.querySelector('nav').classList.toggle('open')"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> <a href="cart.html">Cart</a> <span>/</span> <span>Checkout</span></div>
+  <h1>Secure <span>Checkout</span></h1>
+  <p>Complete your order in 6 easy steps</p>
+</div>
+
+<section>
+  <div class="checkout-steps" id="checkoutSteps">
+    <div class="checkout-step active" data-step="1"><div class="step-num">1</div><div class="step-label">Customer</div></div>
+    <div class="checkout-step" data-step="2"><div class="step-num">2</div><div class="step-label">Address</div></div>
+    <div class="checkout-step" data-step="3"><div class="step-num">3</div><div class="step-label">Shipping</div></div>
+    <div class="checkout-step" data-step="4"><div class="step-num">4</div><div class="step-label">Payment</div></div>
+    <div class="checkout-step" data-step="5"><div class="step-num">5</div><div class="step-label">Review</div></div>
+    <div class="checkout-step" data-step="6"><div class="step-num">6</div><div class="step-label">Confirm</div></div>
+  </div>
+
+  <div class="checkout-grid">
+    <div class="checkout-form">
+      <!-- Step 1: Customer Information -->
+      <div class="step-content active" data-step="1">
+        <h2>Customer Information</h2>
+        <p style="color:rgba(255,255,255,0.5);margin-bottom:20px">Enter your contact details</p>
+        <div id="guestEmailGroup" class="form-group">
+          <label>Email *</label>
+          <input type="email" id="custEmail" placeholder="john@example.com" required>
+          <div class="error-text">Please enter a valid email</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" id="custFirstName" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" id="custLastName" placeholder="Doe" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Phone (optional)</label>
+          <input type="tel" id="custPhone" placeholder="+1 (555) 123-4567">
+        </div>
+        <div class="form-group">
+          <label>Order Notes (optional)</label>
+          <textarea id="orderNotes" rows="3" placeholder="Special instructions for delivery..." style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;padding:12px;width:100%;resize:vertical"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="checkoutNext(2)" style="margin-top:15px">Continue to Shipping <i class="fas fa-arrow-right"></i></button>
+      </div>
+
+      <!-- Step 2: Shipping Address -->
+      <div class="step-content" data-step="2">
+        <h2>Shipping Address</h2>
+        <p style="color:rgba(255,255,255,0.5);margin-bottom:20px">Where should we deliver your order?</p>
+        <div id="savedAddresses"></div>
+        <div id="addressForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Address *</label>
+              <input type="text" id="shipStreet" placeholder="123 Main Street" required>
+            </div>
+            <div class="form-group">
+              <label>Apt/Suite (optional)</label>
+              <input type="text" id="shipApt" placeholder="Apt 4B">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City *</label>
+              <input type="text" id="shipCity" placeholder="New York" required>
+            </div>
+            <div class="form-group">
+              <label>State *</label>
+              <input type="text" id="shipState" placeholder="NY" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ZIP Code *</label>
+              <input type="text" id="shipZip" placeholder="10001" required>
+            </div>
+            <div class="form-group">
+              <label>Country *</label>
+              <select id="shipCountry" onchange="onCountryChange()" required>
+                <option value="">Select...</option>
+                <option value="US">United States</option>
+                <option value="IN">India</option>
+                <option value="CA">Canada</option>
+                <option value="UK">United Kingdom</option>
+                <option value="AU">Australia</option>
+                <option value="DE">Germany</option>
+                <option value="FR">France</option>
+              </select>
+            </div>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer">
+            <input type="checkbox" id="saveAddress" checked> <span style="color:rgba(255,255,255,0.6)">Save this address</span>
+          </label>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="btn btn-secondary" onclick="checkoutPrev(1)"><i class="fas fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary" onclick="checkoutNext(3)">Continue to Shipping Method <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Step 3: Shipping Method -->
+      <div class="step-content" data-step="3">
+        <h2>Shipping Method</h2>
+        <p style="color:rgba(255,255,255,0.5);margin-bottom:20px">Choose your delivery speed</p>
+        <div id="shippingMethods"></div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="btn btn-secondary" onclick="checkoutPrev(2)"><i class="fas fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary" onclick="checkoutNext(4)">Continue to Payment <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Step 4: Payment Method -->
+      <div class="step-content" data-step="4">
+        <h2>Payment Method</h2>
+        <p style="color:rgba(255,255,255,0.5);margin-bottom:20px">Choose how to pay</p>
+        <div id="gatewayOptions"></div>
+        <div id="stripeCardSection" style="margin-top:20px;display:none">
+          <label>Card Details</label>
+          <div id="card-element"></div>
+          <div class="stripe-error" id="stripeError"></div>
+        </div>
+        <div id="paypalSection" style="display:none;margin-top:20px">
+          <div id="paypalButtonContainer"></div>
+        </div>
+        <div id="razorpaySection" style="display:none;margin-top:20px">
+          <div style="padding:15px;background:rgba(255,255,255,0.03);border-radius:8px;text-align:center">
+            <i class="fas fa-credit-card" style="font-size:32px;color:#7C3AED;margin-bottom:10px;display:block"></i>
+            <p style="color:rgba(255,255,255,0.6);margin-bottom:15px">You will be redirected to Razorpay to complete payment</p>
+            <button class="btn btn-primary" id="razorpayPayBtn" onclick="payWithRazorpay()" style="width:100%;justify-content:center">
+              <i class="fas fa-lock"></i> Pay with Razorpay
+            </button>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="btn btn-secondary" onclick="checkoutPrev(3)"><i class="fas fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary" onclick="checkoutNext(5)">Review Order <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Step 5: Order Review -->
+      <div class="step-content" data-step="5">
+        <h2>Review Your Order</h2>
+        <p style="color:rgba(255,255,255,0.5);margin-bottom:20px">Please review before placing your order</p>
+        <div class="review-section" id="reviewCustomer">
+          <strong>Customer</strong><br>
+          <span id="reviewCustInfo"></span>
+        </div>
+        <div class="review-section" id="reviewAddress">
+          <strong>Shipping To</strong><br>
+          <span id="reviewAddrInfo"></span>
+        </div>
+        <div class="review-section" id="reviewShipping">
+          <strong>Shipping Method</strong><br>
+          <span id="reviewShipInfo"></span>
+        </div>
+        <div class="review-section" id="reviewPayment">
+          <strong>Payment Method</strong><br>
+          <span id="reviewPayInfo"></span>
+        </div>
+        <div class="review-section" id="reviewItems">
+          <strong>Items</strong>
+          <div id="reviewItemsList"></div>
+        </div>
+        <div class="review-section" id="reviewCouponSection" style="display:none">
+          <strong>Coupon</strong><br>
+          <span id="reviewCouponInfo"></span>
+        </div>
+        <div class="review-section" id="reviewGiftSection" style="display:none">
+          <strong>Gift Card</strong><br>
+          <span id="reviewGiftInfo"></span>
+        </div>
+        <div class="review-section" id="reviewTotals">
+          <strong>Order Total</strong>
+          <div style="margin-top:8px"></div>
+          <div class="summary-row"><span>Subtotal</span><span id="revSubtotal">$0.00</span></div>
+          <div class="summary-row" id="revDiscountRow" style="display:none"><span>Discount</span><span id="revDiscount" style="color:#00D2FF">$0.00</span></div>
+          <div class="summary-row" id="revGiftRow" style="display:none"><span>Gift Card</span><span id="revGift" style="color:#00D2FF">$0.00</span></div>
+          <div class="summary-row"><span>Shipping</span><span id="revShipping">$0.00</span></div>
+          <div class="summary-row"><span>Tax</span><span id="revTax">$0.00</span></div>
+          <div class="summary-row total" style="border:none;padding-top:15px;font-size:22px"><span>Total</span><span id="revTotal" class="summary-total">$0.00</span></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="btn btn-secondary" onclick="checkoutPrev(4)"><i class="fas fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary" id="placeOrderBtn" onclick="placeOrder()" style="flex:1;justify-content:center;padding:18px;font-size:18px">
+            <i class="fas fa-lock"></i> Place Order - <span id="placeOrderTotal">$0.00</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 6: Confirmation -->
+      <div class="step-content" data-step="6" style="text-align:center">
+        <div style="padding:40px 20px">
+          <div style="font-size:64px;margin-bottom:20px" id="confirmIcon">&#9203;</div>
+          <h2 id="confirmTitle">Processing your order...</h2>
+          <p style="color:rgba(255,255,255,0.5);margin-bottom:10px" id="confirmMessage">Please wait while we process your payment.</p>
+          <div id="confirmDetails"></div>
+          <div id="confirmActions" style="display:none;margin-top:25px">
+            <a href="orders.html" class="btn btn-primary">View My Orders <i class="fas fa-arrow-right"></i></a>
+            <a href="collection.html" class="btn btn-secondary" style="margin-left:10px">Continue Shopping</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="checkout-summary">
+      <h3>Order Summary</h3>
+      <div id="checkoutItems" class="checkout-items"></div>
+      <div style="border-top:1px solid rgba(255,255,255,0.05);padding-top:15px;margin-top:15px">
+        <div class="coupon-row">
+          <input type="text" id="couponInput" placeholder="Coupon code" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;padding:10px;font-size:13px">
+          <button class="btn btn-secondary" onclick="checkoutApplyCoupon()" style="padding:10px 15px;font-size:13px">Apply</button>
+        </div>
+        <div id="couponApplied" style="display:none;margin-bottom:8px;font-size:13px;color:#00D2FF">&#10003; <span id="couponAppliedText"></span> <i class="fas fa-times" onclick="checkoutRemoveCoupon()" style="cursor:pointer;margin-left:8px;color:rgba(255,255,255,0.3)"></i></div>
+        <div class="giftcard-row">
+          <input type="text" id="giftInput" placeholder="Gift card code" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;padding:10px;font-size:13px">
+          <button class="btn btn-secondary" onclick="checkoutApplyGiftCard()" style="padding:10px 15px;font-size:13px">Apply</button>
+        </div>
+        <div id="giftApplied" style="display:none;margin-bottom:8px;font-size:13px;color:#00D2FF">&#10003; <span id="giftAppliedText"></span> <i class="fas fa-times" onclick="checkoutRemoveGiftCard()" style="cursor:pointer;margin-left:8px;color:rgba(255,255,255,0.3)"></i></div>
+        <div class="summary-row"><span>Subtotal</span><span id="checkoutSubtotal">$0.00</span></div>
+        <div class="summary-row" id="checkoutDiscountRow" style="display:none"><span>Discount</span><span id="checkoutDiscount" style="color:#00D2FF">-$0.00</span></div>
+        <div class="summary-row" id="checkoutGiftRow" style="display:none"><span>Gift Card</span><span id="checkoutGift" style="color:#00D2FF">-$0.00</span></div>
+        <div class="summary-row"><span>Shipping</span><span id="checkoutShipping">Calculated at next step</span></div>
+        <div class="summary-row"><span>Tax</span><span id="checkoutTax">$0.00</span></div>
+        <div class="summary-row total" style="border:none;padding-top:15px;font-size:22px"><span>Total</span><span id="checkoutTotal" class="summary-total">$0.00</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <a href="index.html" class="logo" style="font-size:22px;margin-bottom:15px;display:inline-block;"><i class="fas fa-crown"></i> VIRAL<span style="font-size:10px;display:block;-webkit-text-fill-color:initial;color:rgba(255,255,255,0.5);">CLOTHES.SHOP</span></a>
+      <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;">Your destination for premium streetwear and fashion.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a><a href="collection.html">Shop All</a><a href="collection.html?category=new">New Arrivals</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="faq.html">FAQ</a><a href="shipping-policy.html">Shipping Info</a><a href="refund-policy.html">Returns</a><a href="contact.html">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Policies</h4>
+      <a href="privacy-policy.html">Privacy Policy</a><a href="terms-conditions.html">Terms &amp; Conditions</a><a href="refund-policy.html">Refund Policy</a><a href="shipping-policy.html">Shipping Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 ViralClothes.Shop &mdash; All Rights Reserved. Made with ❤️</p></div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <h2>Shopping Cart <i class="fas fa-times" onclick="toggleCart()"></i></h2>
+  <div class="cart-items" id="cartItems"><div class="empty-cart"><i class="fas fa-shopping-bag"></i><p>Your cart is empty</p></div></div>
+  <div id="savedItems"></div>
+  <div class="cart-total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+  <button class="checkout-btn" onclick="checkout()">Checkout <i class="fas fa-arrow-right"></i></button>
+</div>
+<div class="toast" id="toast"></div>
+<button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&intent=capture" id="paypalScript"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+<script>
+let checkoutStep = 1;
+let stripeElements = null;
+let stripeCard = null;
+let stripeClient = null;
+let selectedPayment = null;
+let checkoutData = {};
+let availableGateways = [];
+let gatewayConfigs = {};
+
+function initCheckout() {
+  loadCart();
+  updateCartUI();
+  summarizeCheckout();
+  if (api.isLoggedIn()) {
+    const user = api.getUser();
+    if (user) {
+      document.getElementById('custEmail').value = user.email || '';
+      document.getElementById('custFirstName').value = (user.name || '').split(' ')[0] || '';
+      document.getElementById('custLastName').value = (user.name || '').split(' ').slice(1).join(' ') || '';
+      if (user.phone) document.getElementById('custPhone').value = user.phone;
+    }
+    loadSavedAddresses();
+  }
+  initStripe();
+  loadGateways();
+}
+
+async function loadGateways() {
+  const country = document.getElementById('shipCountry')?.value || 'US';
+  try {
+    const data = await api.getAvailableGateways(country);
+    availableGateways = data.gateways || [];
+    gatewayConfigs = {};
+    availableGateways.forEach(g => { gatewayConfigs[g.name] = g; });
+    renderGatewayOptions();
+  } catch(e) {
+    // Fallback to Stripe
+    availableGateways = [{ name: 'stripe', displayName: 'Credit/Debit Card (Stripe)', isActive: true }];
+    renderGatewayOptions();
+  }
+}
+
+function renderGatewayOptions() {
+  const container = document.getElementById('gatewayOptions');
+  if (!container) return;
+  if (availableGateways.length === 0) {
+    container.innerHTML = '<p style="color:rgba(255,255,255,0.4)">No payment gateways available for your region</p>';
+    return;
+  }
+  container.innerHTML = availableGateways.map((g, i) => {
+    const icons = { stripe: 'fab fa-cc-stripe', paypal: 'fab fa-paypal', razorpay: 'fas fa-credit-card' };
+    const colors = { stripe: '', paypal: 'color:#0070BA', razorpay: 'color:#7C3AED' };
+    const isFirst = i === 0;
+    return `<div class="payment-option ${isFirst ? 'selected' : ''}" onclick="selectGateway('${g.name}')" id="gw_${g.name}">
+      <input type="radio" name="payment" value="${g.name}" ${isFirst ? 'checked' : ''}>
+      <i class="${icons[g.name] || 'fas fa-credit-card'}" style="font-size:24px;${colors[g.name] || ''}"></i>
+      <div><strong>${g.displayName || g.name}</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.4)">${getGatewayDescription(g.name)}</span></div>
+    </div>`;
+  }).join('');
+  // Select first gateway
+  selectGateway(availableGateways[0]?.name || 'stripe');
+}
+
+function onCountryChange() {
+  if (typeof loadGateways === 'function') loadGateways();
+}
+
+function getGatewayDescription(name) {
+  const descs = {
+    stripe: 'Pay with Visa, Mastercard, Amex',
+    paypal: 'Secure payment with your PayPal account',
+    razorpay: 'Pay with UPI, Cards, NetBanking, Wallet'
+  };
+  return descs[name] || 'Secure payment';
+}
+
+function selectGateway(name) {
+  selectedPayment = name;
+  document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('.payment-option input').forEach(el => el.checked = false);
+  const opt = document.getElementById(`gw_${name}`);
+  if (opt) { opt.classList.add('selected'); opt.querySelector('input').checked = true; }
+
+  document.getElementById('stripeCardSection').style.display = name === 'stripe' ? 'block' : 'none';
+  document.getElementById('paypalSection').style.display = name === 'paypal' ? 'block' : 'none';
+  document.getElementById('razorpaySection').style.display = name === 'razorpay' ? 'block' : 'none';
+}
+
+async function loadSavedAddresses() {
+  if (!api.isLoggedIn()) return;
+  try {
+    const data = await api.getAddresses();
+    if (data.addresses && data.addresses.length > 0) {
+      const container = document.getElementById('savedAddresses');
+      container.innerHTML = '<h3 style="margin-bottom:10px;font-size:15px">Saved Addresses</h3>' +
+        data.addresses.map(a => `<div class="saved-address" onclick="selectAddress('${a._id}')" data-id="${a._id}">
+          <strong>${a.label || 'Address'}</strong><br>
+          ${a.street}${a.apartment ? ', ' + a.apartment : ''}, ${a.city}, ${a.state} ${a.zip}
+          ${a.isDefault ? ' <span style="color:#00D2FF;font-size:11px">Default</span>' : ''}
+        </div>`).join('') +
+        '<p style="margin-top:8px;font-size:13px;color:rgba(255,255,255,0.4);cursor:pointer" onclick="document.getElementById(\'addressForm\').style.display=\'block\'">+ Enter new address</p>';
+      // Auto-fill default address
+      const def = data.addresses.find(a => a.isDefault) || data.addresses[0];
+      if (def) selectAddress(def._id);
+    }
+  } catch(e) {}
+}
+
+function selectAddress(id) {
+  document.querySelectorAll('.saved-address').forEach(el => el.classList.remove('selected'));
+  const el = document.querySelector(`.saved-address[data-id="${id}"]`);
+  if (el) el.classList.add('selected');
+  document.getElementById('addressForm').style.display = 'none';
+  checkoutData.selectedAddressId = id;
+  // In a real app we'd fetch & fill - for now load from server
+}
+
+function initStripe() {
+  if (typeof Stripe !== 'undefined') {
+    const cfg = gatewayConfigs['stripe'];
+    const key = cfg?.publishableKey || '';
+    if (key) {
+      stripeClient = Stripe(key);
+      const elements = stripeClient.elements();
+      stripeCard = elements.create('card', {
+        style: { base: { fontSize: '16px', color: '#fff', '::placeholder': { color: 'rgba(255,255,255,0.4)' }, iconColor: '#6C3CE1' } }
+      });
+      stripeCard.mount('#card-element');
+      stripeCard.on('change', event => {
+        const err = document.getElementById('stripeError');
+        if (event.error) { err.textContent = event.error.message; err.style.display = 'block'; }
+        else { err.style.display = 'none'; }
+      });
+    }
+  }
+}
+
+function checkoutNext(step) {
+  if (!validateStep(checkoutStep)) return;
+  checkoutStep = step;
+  updateSteps();
+  if (step === 3) loadShippingMethods();
+  if (step === 5) buildReview();
+}
+
+function checkoutPrev(step) {
+  checkoutStep = step;
+  updateSteps();
+}
+
+function updateSteps() {
+  document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+  document.getElementById(`checkoutSteps`).querySelectorAll('.checkout-step').forEach((el, i) => {
+    el.classList.toggle('active', i + 1 === checkoutStep);
+    el.classList.toggle('done', i + 1 < checkoutStep);
+  });
+  const content = document.querySelector(`.step-content[data-step="${checkoutStep}"]`);
+  if (content) content.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  summarizeCheckout();
+}
+
+function validateStep(step) {
+  if (step === 1) {
+    const email = document.getElementById('custEmail').value.trim();
+    const first = document.getElementById('custFirstName').value.trim();
+    const last = document.getElementById('custLastName').value.trim();
+    if (!email || !email.includes('@') || !first || !last) {
+      showToast('Please fill in all required fields'); return false;
+    }
+    checkoutData.customer = { email, firstName: first, lastName: last, phone: document.getElementById('custPhone').value };
+    return true;
+  }
+  if (step === 2) {
+    if (!checkoutData.selectedAddressId) {
+      const street = document.getElementById('shipStreet').value.trim();
+      const city = document.getElementById('shipCity').value.trim();
+      const state = document.getElementById('shipState').value.trim();
+      const zip = document.getElementById('shipZip').value.trim();
+      const country = document.getElementById('shipCountry').value;
+      if (!street || !city || !state || !zip || !country) {
+        showToast('Please fill in all address fields'); return false;
+      }
+      checkoutData.address = {
+        fullName: `${checkoutData.customer.firstName} ${checkoutData.customer.lastName}`,
+        email: checkoutData.customer.email,
+        phone: checkoutData.customer.phone,
+        street, apartment: document.getElementById('shipApt').value, city, state, zip, country
+      };
+      if (document.getElementById('saveAddress').checked && api.isLoggedIn()) {
+        api.createAddress({ fullName: checkoutData.address.fullName, phone: checkoutData.customer.phone, street, apartment: document.getElementById('shipApt').value, city, state, zip, country }).catch(()=>{});
+      }
+    }
+    return true;
+  }
+  if (step === 3) {
+    const selected = document.querySelector('input[name="shipping"]:checked');
+    if (!selected) { showToast('Please select a shipping method'); return false; }
+    checkoutData.shippingMethodId = selected.value;
+    checkoutData.shippingMethodName = selected.dataset.name;
+    checkoutData.shippingCost = parseFloat(selected.dataset.price);
+    return true;
+  }
+  return true;
+}
+
+async function loadShippingMethods() {
+  const container = document.getElementById('shippingMethods');
+  if (container.children.length > 0) return;
+  container.innerHTML = '<p style="color:rgba(255,255,255,0.4)">Loading shipping options...</p>';
+  try {
+    const data = await api.getShippingMethods();
+    const subtotal = getCartSubtotal();
+    container.innerHTML = data.methods.map((m, i) => {
+      const finalPrice = subtotal >= m.freeThreshold && m.freeThreshold > 0 ? 0 : m.price;
+      return `<label class="shipping-option ${i===0?'selected':''}">
+        <input type="radio" name="shipping" value="${m._id}" data-price="${finalPrice}" data-name="${m.name}" ${i===0?'checked':''}>
+        <div style="flex:1">
+          <strong>${m.name}</strong><br>
+          <span style="font-size:13px;color:rgba(255,255,255,0.4)">${m.description} (${m.estimatedDays})</span>
+        </div>
+        <div><strong>${finalPrice === 0 ? 'FREE' : '$' + finalPrice.toFixed(2)}</strong></div>
+      </label>`;
+    }).join('');
+  } catch(e) {
+    container.innerHTML = '<p style="color:rgba(255,255,255,0.4)">Using default shipping</p>';
+    container.innerHTML += `<label class="shipping-option selected">
+      <input type="radio" name="shipping" value="standard" data-price="9.99" data-name="Standard Shipping" checked>
+      <div style="flex:1"><strong>Standard Shipping</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.4)">5-7 business days</span></div>
+      <div><strong>${getCartSubtotal() >= 50 ? 'FREE' : '$9.99'}</strong></div>
+    </label>`;
+  }
+}
+
+function summarizeCheckout() {
+  const container = document.getElementById('checkoutItems');
+  if (!container) return;
+  const items = getCheckoutItems();
+  container.innerHTML = items.map(c => `
+    <div class="cart-item" style="background:rgba(255,255,255,0.03);border-radius:8px;padding:10px;margin-bottom:8px;display:flex;align-items:center;gap:10px">
+      <div style="width:40px;height:40px;border-radius:6px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${c.icon}</div>
+      <div style="flex:1;font-size:14px">${c.name} <span style="color:rgba(255,255,255,0.3)">x${c.qty}</span></div>
+      <div style="font-weight:600">$${(c.price * c.qty).toFixed(2)}</div>
+    </div>
+  `).join('');
+
+  const t = getCheckoutTotals();
+  document.getElementById('checkoutSubtotal').textContent = `$${t.subtotal.toFixed(2)}`;
+  const discountRow = document.getElementById('checkoutDiscountRow');
+  if (t.discount > 0) { discountRow.style.display = 'flex'; document.getElementById('checkoutDiscount').textContent = `-$${t.discount.toFixed(2)}`; }
+  else discountRow.style.display = 'none';
+  const giftRow = document.getElementById('checkoutGiftRow');
+  if (t.gcDiscount > 0) { giftRow.style.display = 'flex'; document.getElementById('checkoutGift').textContent = `-$${t.gcDiscount.toFixed(2)}`; }
+  else giftRow.style.display = 'none';
+  document.getElementById('checkoutShipping').textContent = t.shipping === 0 ? 'FREE' : `$${t.shipping.toFixed(2)}`;
+  document.getElementById('checkoutTax').textContent = `$${t.tax.toFixed(2)}`;
+  document.getElementById('checkoutTotal').textContent = `$${t.total.toFixed(2)}`;
+}
+
+function getCheckoutItems() {
+  if (cart.length > 0) return cart;
+  const stored = localStorage.getItem('vc_cart');
+  if (stored) try { return JSON.parse(stored); } catch(e) {}
+  return [];
+}
+
+function getCheckoutTotals() {
+  const items = getCheckoutItems();
+  const subtotal = items.reduce((s, c) => s + c.price * c.qty, 0);
+  const discount = appliedCoupon ? (appliedCoupon.type === 'percentage' ? Math.min(subtotal * (appliedCoupon.value / 100), appliedCoupon.maxDiscount || Infinity) : Math.min(appliedCoupon.value, subtotal)) : 0;
+  const gcDiscount = appliedGiftCard ? Math.min(appliedGiftCard.balance, subtotal - discount) : 0;
+  const shipping = checkoutData.shippingCost !== undefined ? checkoutData.shippingCost : (subtotal >= 50 ? 0 : 9.99);
+  const tax = Math.max(0, (subtotal - discount - gcDiscount) * 0.08);
+  const total = Math.max(0, subtotal + shipping + tax - discount - gcDiscount);
+  return { subtotal, discount, gcDiscount, shipping, tax, total };
+}
+
+async function checkoutApplyCoupon() {
+  const input = document.getElementById('couponInput');
+  const code = input.value.trim().toUpperCase();
+  if (!code) return showToast('Enter a coupon code');
+  try {
+    await applyCoupon(code);
+    document.getElementById('couponApplied').style.display = 'block';
+    document.getElementById('couponAppliedText').textContent = `${appliedCoupon.code}: ${appliedCoupon.type === 'percentage' ? appliedCoupon.value + '% off' : '$' + appliedCoupon.value + ' off'}`;
+    input.value = '';
+    summarizeCheckout();
+    showToast('Coupon applied!');
+  } catch(e) { showToast(e.message); }
+}
+
+function checkoutRemoveCoupon() {
+  removeCoupon();
+  document.getElementById('couponApplied').style.display = 'none';
+  summarizeCheckout();
+}
+
+async function checkoutApplyGiftCard() {
+  const input = document.getElementById('giftInput');
+  const code = input.value.trim().toUpperCase();
+  if (!code) return showToast('Enter a gift card code');
+  try {
+    await applyGiftCard(code);
+    document.getElementById('giftApplied').style.display = 'block';
+    document.getElementById('giftAppliedText').textContent = `${appliedGiftCard.code}: $${appliedGiftCard.balance.toFixed(2)} remaining`;
+    input.value = '';
+    summarizeCheckout();
+    showToast('Gift card applied!');
+  } catch(e) { showToast(e.message); }
+}
+
+function checkoutRemoveGiftCard() {
+  removeGiftCard();
+  document.getElementById('giftApplied').style.display = 'none';
+  summarizeCheckout();
+}
+
+function buildReview() {
+  const c = checkoutData.customer;
+  document.getElementById('reviewCustInfo').innerHTML = `${c.firstName} ${c.lastName}<br>${c.email}${c.phone ? ' | ' + c.phone : ''}`;
+  const addr = checkoutData.address;
+  document.getElementById('reviewAddrInfo').innerHTML = addr ? `${addr.fullName}<br>${addr.street}${addr.apartment ? ', ' + addr.apartment : ''}<br>${addr.city}, ${addr.state} ${addr.zip}<br>${addr.country}` : 'Address set';
+  document.getElementById('reviewShipInfo').textContent = `${checkoutData.shippingMethodName || 'Standard'} - ${checkoutData.shippingCost === 0 ? 'FREE' : '$' + (checkoutData.shippingCost || 9.99).toFixed(2)}`;
+
+  const gwName = availableGateways.find(g => g.name === selectedPayment)?.displayName || selectedPayment;
+  document.getElementById('reviewPayInfo').textContent = gwName;
+
+  const items = getCheckoutItems();
+  document.getElementById('reviewItemsList').innerHTML = items.map(c => `<div class="review-item"><div class="review-item-img">${c.icon}</div><div style="flex:1"><strong>${c.name}</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.4)">Qty: ${c.qty}</span></div><div><strong>$${(c.price * c.qty).toFixed(2)}</strong></div></div>`).join('');
+
+  const t = getCheckoutTotals();
+  document.getElementById('revSubtotal').textContent = `$${t.subtotal.toFixed(2)}`;
+  const dr = document.getElementById('revDiscountRow');
+  if (t.discount > 0) { dr.style.display = 'flex'; document.getElementById('revDiscount').textContent = `-$${t.discount.toFixed(2)}`; } else dr.style.display = 'none';
+  const gr = document.getElementById('revGiftRow');
+  if (t.gcDiscount > 0) { gr.style.display = 'flex'; document.getElementById('revGift').textContent = `-$${t.gcDiscount.toFixed(2)}`; } else gr.style.display = 'none';
+  document.getElementById('revShipping').textContent = t.shipping === 0 ? 'FREE' : `$${t.shipping.toFixed(2)}`;
+  document.getElementById('revTax').textContent = `$${t.tax.toFixed(2)}`;
+  document.getElementById('revTotal').textContent = `$${t.total.toFixed(2)}`;
+  document.getElementById('placeOrderTotal').textContent = `$${t.total.toFixed(2)}`;
+
+  const cs = document.getElementById('reviewCouponSection');
+  if (appliedCoupon) { cs.style.display = 'block'; document.getElementById('reviewCouponInfo').textContent = `${appliedCoupon.code}: ${appliedCoupon.type === 'percentage' ? appliedCoupon.value + '% off' : '$' + appliedCoupon.value + ' off'}`; } else cs.style.display = 'none';
+  const gs = document.getElementById('reviewGiftSection');
+  if (appliedGiftCard) { gs.style.display = 'block'; document.getElementById('reviewGiftInfo').textContent = `${appliedGiftCard.code}: $${appliedGiftCard.balance.toFixed(2)} applied`; } else gs.style.display = 'none';
+}
+
+async function placeOrder() {
+  const btn = document.getElementById('placeOrderBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+  const t = getCheckoutTotals();
+  const items = getCheckoutItems();
+  const notes = document.getElementById('orderNotes')?.value || '';
+  try {
+    checkoutData.notes = notes;
+    if (selectedPayment === 'stripe') await processStripePayment(items, t);
+    else if (selectedPayment === 'paypal') await processPayPalPayment(items, t);
+    else if (selectedPayment === 'razorpay') await processRazorpayPayment(items, t);
+    else throw new Error('No payment method selected');
+  } catch (err) {
+    showToast(err.message || 'Payment failed');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-lock"></i> Place Order - $' + t.total.toFixed(2);
+  }
+}
+
+async function processStripePayment(items, t) {
+  const orderItems = items.map(c => ({ productId: c.id, quantity: c.qty, price: c.price, size: c.size || '', color: c.color || '' }));
+  const data = await api.initiatePayment({
+    items: orderItems, shippingMethodId: checkoutData.shippingMethodId || '',
+    couponCode: appliedCoupon?.code || '', giftCardCode: appliedGiftCard?.code || '',
+    gateway: 'stripe', country: checkoutData.address?.country || 'US', shippingAddress: checkoutData.address
+  });
+  if (stripeClient && stripeCard) {
+    const { error, paymentIntent } = await stripeClient.confirmCardPayment(data.paymentResult.clientSecret, { payment_method: { card: stripeCard } });
+    if (error) throw new Error(error.message);
+    if (paymentIntent.status !== 'succeeded') throw new Error('Payment not completed');
+    const result = await api.completePayment({
+      transactionId: data.transactionId, items: orderItems,
+      shippingAddress: checkoutData.address, shippingMethodId: checkoutData.shippingMethodId || '',
+      couponCode: appliedCoupon?.code || '', giftCardCode: appliedGiftCard?.code || '',
+      notes: checkoutData.notes
+    });
+    showOrderConfirmation(result.order);
+  } else {
+    const result = await api.completePayment({
+      transactionId: data.transactionId, items: orderItems,
+      shippingAddress: checkoutData.address, shippingMethodId: checkoutData.shippingMethodId || '',
+      couponCode: appliedCoupon?.code || '', giftCardCode: appliedGiftCard?.code || '',
+      notes: checkoutData.notes
+    });
+    showOrderConfirmation(result.order);
+  }
+}
+
+async function processPayPalPayment(items, t) {
+  const orderItems = items.map(c => ({ productId: c.id, quantity: c.qty, price: c.price, name: c.name }));
+  const data = await api.initiatePayment({
+    items: orderItems, shippingMethodId: checkoutData.shippingMethodId || '',
+    couponCode: appliedCoupon?.code || '', giftCardCode: appliedGiftCard?.code || '',
+    gateway: 'paypal', country: checkoutData.address?.country || 'US', shippingAddress: checkoutData.address
+  });
+  if (window.paypal) {
+    await window.paypal.Buttons({
+      createOrder: () => data.paymentResult.metadata.orderID,
+      onApprove: async (d) => {
+        const result = await api.completePayment({
+          transactionId: data.transactionId, orderID: d.orderID, items: orderItems,
+          shippingAddress: checkoutData.address, shippingMethodId: checkoutData.shippingMethodId || '',
+          couponCode: appliedCoupon?.code || '', giftCardCode: appliedGiftCard?.code || '',
+          notes: checkoutData.notes
+        });
+        showOrderConfirmation(result.order);
+      },
+      onError: () => { throw new Error('PayPal payment failed'); }
+    }).render('#paypalButtonContainer');
+  }
+}
+
+async function processRazorpayPayment(items, t) {
+  const orderItems = items.map(c => ({ productId: c.id, quantity: c.qty, price: c.price, name: c.name }));
+  const data = await api.createRazorpayOrder({
+    items: orderItems, shippingMethodId: checkoutData.shippingMethodId || '',
+    couponCode: appliedCoupon?.code || '', giftCardCode: appliedGiftCard?.code || '',
+    shippingAddress: checkoutData.address
+  });
+  checkoutData._razorpayTxId = data.transactionId;
+  checkoutData._razorpayAmount = data.amount;
+  const cfg = gatewayConfigs['razorpay'];
+  const options = {
+    key: cfg?.keyId || '',
+    amount: Math.round(data.amount * 100),
+    currency: data.currency || 'INR',
+    name: 'ViralClothes.Shop',
+    description: 'Order Payment',
+    order_id: data.razorpayOrderId,
+    prefill: { name: checkoutData.customer?.firstName + ' ' + checkoutData.customer?.lastName, email: checkoutData.customer?.email, contact: checkoutData.customer?.phone || '' },
+    theme: { color: '#6C3CE1' },
+    handler: async function(response) {
+      const result = await api.confirmRazorpayPayment({
+        razorpayOrderId: response.razorpay_order_id,
+        razorpayPaymentId: response.razorpay_payment_id,
+        razorpaySignature: response.razorpay_signature,
+        items: orderItems, shippingAddress: checkoutData.address,
+        shippingMethodId: checkoutData.shippingMethodId || '',
+        couponCode: appliedCoupon?.code || '', giftCardCode: appliedGiftCard?.code || '',
+        notes: checkoutData.notes
+      });
+      showOrderConfirmation(result.order);
+    },
+    modal: { ondismiss: function() {
+      showToast('Payment cancelled');
+      document.getElementById('placeOrderBtn').disabled = false;
+      document.getElementById('placeOrderBtn').innerHTML = '<i class="fas fa-lock"></i> Place Order';
+    }}
+  };
+  const rzp = new window.Razorpay(options);
+  rzp.open();
+}
+
+function showOrderConfirmation(order) {
+  checkoutStep = 6;
+  updateSteps();
+  document.getElementById('confirmIcon').innerHTML = '&#10004;&#65039;';
+  document.getElementById('confirmTitle').textContent = 'Order Placed Successfully!';
+  document.getElementById('confirmMessage').innerHTML = `Thank you for your order! Your order number is <strong style="color:#6C3CE1">${order.orderNumber}</strong>.`;
+  const gwName = availableGateways.find(g => g.name === selectedPayment)?.displayName || selectedPayment;
+  document.getElementById('confirmDetails').innerHTML = `
+    <p style="color:rgba(255,255,255,0.4);font-size:14px">We've sent a confirmation to <strong>${order.shippingAddress?.email || checkoutData.customer?.email}</strong></p>
+    <div style="margin:20px auto;max-width:400px;background:rgba(255,255,255,0.03);border-radius:12px;padding:20px">
+      <div class="summary-row"><span>Order Number</span><span style="color:#6C3CE1;font-weight:700">${order.orderNumber}</span></div>
+      <div class="summary-row"><span>Payment</span><span>${gwName}</span></div>
+      <div class="summary-row"><span>Total Charged</span><span style="font-weight:700;font-size:18px">$${(order.total || 0).toFixed(2)}</span></div>
+    </div>
+  `;
+  document.getElementById('confirmActions').style.display = 'block';
+  clearCart();
+  updateCartUI();
+}
+
+document.addEventListener('DOMContentLoaded', initCheckout);
+</script>
+</body>
+</html>

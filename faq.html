@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>FAQ - ViralClothes.Shop</title>
+  <meta name="description" content="Frequently asked questions about ViralClothes.Shop - orders, shipping, returns, and more.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <meta property="og:title" content="FAQ - ViralClothes.Shop">
+  <meta property="og:description" content="Frequently asked questions about ViralClothes.Shop - orders, shipping, returns, and more.">
+  <meta property="og:image" content="/assets/og-image.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FAQ - ViralClothes.Shop">
+  <meta name="twitter:description" content="Frequently asked questions about ViralClothes.Shop - orders, shipping, returns, and more.">
+  <meta name="twitter:image" content="/assets/og-image.jpg">
+  <link rel="canonical" href="/faq.html">
+  <meta name="robots" content="index, follow">
+  <link rel="manifest" href="/seo/manifest.json">
+  <meta name="theme-color" content="#1a1a2e">
+  <script src="js/seo.js" defer></script>
+</head>
+<body>
+<div class="bg-animation"><span></span><span></span><span></span><span></span></div>
+<header id="header">
+  <a href="index.html" class="logo"><i class="fas fa-crown"></i> VIRAL<span>CLOTHES.SHOP</span></a>
+  <nav>
+    <a href="index.html">Home</a><a href="collection.html">Shop</a><a href="about.html">About</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
+  </nav>
+  <div class="header-actions">
+    <i class="fas fa-search" onclick="window.location.href='search.html'"></i>
+    <a href="wishlist.html"><i class="fas fa-heart"></i></a>
+    <div class="cart-btn" onclick="toggleCart()"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCount">0</span></div>
+    <div class="hamburger" onclick="document.querySelector('nav').classList.toggle('open')"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> <span>FAQ</span></div>
+  <h1>Frequently Asked <span>Questions</span></h1>
+  <p>Find answers to common questions about our products and services</p>
+</div>
+
+<section>
+  <div class="faq-search reveal">
+    <i class="fas fa-search"></i>
+    <input type="text" id="faqSearch" placeholder="Search questions...">
+  </div>
+  <div class="faq-container reveal" id="faqContainer">
+    <div class="faq-item">
+      <button class="faq-question">What payment methods do you accept? <i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><p>We accept all major credit cards (Visa, MasterCard, American Express, Discover), PayPal, Apple Pay, Google Pay, and Shop Pay. All payments are processed securely through encrypted connections.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">How long does shipping take? <i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><p>Domestic orders (US) typically arrive within 3-7 business days. International orders take 7-14 business days depending on the destination. Express shipping options are available at checkout for faster delivery.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">Do you offer free shipping? <i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><p>Yes! We offer free standard shipping on all orders over $50 within the United States. International orders over $100 qualify for free standard shipping.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">What is your return policy? <i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><p>We offer a 30-day hassle-free return policy. Items must be unworn, unwashed, and with tags attached. Simply initiate a return through your account or contact our support team. Refunds are processed within 5-7 business days after we receive the item.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">How do I track my order? <i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><p>Once your order ships, you'll receive a confirmation email with a tracking number. You can also track your order by logging into your account and visiting the Orders section.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">Can I change or cancel my order? <i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><p>You can modify or cancel your order within 1 hour of placing it. After that, the order enters processing and cannot be changed. Contact our support team immediately if you need to make changes.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">Do you have a size guide? <i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><p>Yes! We provide detailed size guides on every product page. Each item includes measurements to help you find the perfect fit. If you're between sizes, we recommend sizing up for a more relaxed fit.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">Are your clothes true to size? <i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><p>Most of our items run true to size, but we recommend checking the size guide on each product page. Some styles like our hoodies are designed with an oversized fit for a more relaxed look.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">Do you ship internationally? <i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><p>Yes, we ship to over 50 countries worldwide. International shipping rates and delivery times vary by location. Customs duties and taxes may apply depending on your country's regulations.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">How do I care for my clothes? <i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><p>We recommend washing all items inside out in cold water and hanging to dry to preserve the quality and color of your garments. Specific care instructions are included on each item's tag.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <a href="index.html" class="logo" style="font-size:22px;margin-bottom:15px;display:inline-block;"><i class="fas fa-crown"></i> VIRAL<span style="font-size:10px;display:block;-webkit-text-fill-color:initial;color:rgba(255,255,255,0.5);">CLOTHES.SHOP</span></a>
+      <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;">Your destination for premium streetwear and fashion.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a><a href="collection.html">Shop All</a><a href="collection.html?category=new">New Arrivals</a><a href="collection.html?category=tshirts">Best Sellers</a><a href="collection.html?category=hoodies">Sale</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="faq.html">FAQ</a><a href="shipping-policy.html">Shipping Info</a><a href="refund-policy.html">Returns</a><a href="contact.html">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Policies</h4>
+      <a href="privacy-policy.html">Privacy Policy</a><a href="terms-conditions.html">Terms &amp; Conditions</a><a href="refund-policy.html">Refund Policy</a><a href="shipping-policy.html">Shipping Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 ViralClothes.Shop &mdash; All Rights Reserved. Made with ❤️</p></div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <h2>Shopping Cart <i class="fas fa-times" onclick="toggleCart()"></i></h2>
+  <div class="cart-items" id="cartItems"><div class="empty-cart"><i class="fas fa-shopping-bag"></i><p>Your cart is empty</p></div></div>
+  <div class="cart-total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+  <button class="checkout-btn" onclick="checkout()">Checkout <i class="fas fa-arrow-right"></i></button>
+</div>
+<div class="toast" id="toast"></div>
+<button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

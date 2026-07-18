@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>My Orders - ViralClothes.Shop</title>
+  <meta name="description" content="View and manage your orders">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .order-card { background:rgba(255,255,255,0.03); border-radius:12px; padding:20px; margin-bottom:15px }
+    .order-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px }
+    .order-number { font-weight:700; color:#6C3CE1 }
+    .order-status { padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600 }
+    .status-confirmed { background:rgba(108,60,225,0.15); color:#6C3CE1 }
+    .status-processing { background:rgba(255,217,61,0.15); color:#FFD93D }
+    .status-shipped { background:rgba(0,210,255,0.15); color:#00D2FF }
+    .status-delivered { background:rgba(168,224,99,0.15); color:#A8E063 }
+    .status-cancelled { background:rgba(255,107,107,0.15); color:#FF6B6B }
+    .order-items { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 }
+    .order-item-icon { width:40px;height:40px;border-radius:6px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:20px }
+    .order-footer { display:flex; justify-content:space-between; align-items:center; padding-top:12px; border-top:1px solid rgba(255,255,255,0.05); flex-wrap:wrap; gap:8px }
+    .order-total { font-size:18px; font-weight:700 }
+    .modal-overlay { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px }
+    .modal-overlay.open { display:flex }
+    .modal-content { background:#1a1a2e; border-radius:16px; max-width:600px; width:100%; max-height:90vh; overflow-y:auto; padding:30px }
+    .timeline { position:relative; padding-left:30px }
+    .timeline::before { content:''; position:absolute; left:12px; top:0; bottom:0; width:2px; background:rgba(255,255,255,0.1) }
+    .timeline-item { position:relative; margin-bottom:20px }
+    .timeline-item::before { content:''; position:absolute; left:-24px; top:4px; width:12px; height:12px; border-radius:50%; background:rgba(255,255,255,0.2) }
+    .timeline-item.done::before { background:#6C3CE1 }
+    .timeline-item.active::before { background:#00D2FF; box-shadow:0 0 8px rgba(0,210,255,0.5) }
+    @media(max-width:768px) { .order-header { flex-direction:column; align-items:flex-start } }
+  </style>
+  <meta property="og:title" content="My Orders - ViralClothes.Shop">
+  <meta property="og:description" content="View and manage your orders at ViralClothes.Shop">
+  <meta property="og:image" content="/assets/og-image.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="My Orders - ViralClothes.Shop">
+  <meta name="twitter:description" content="View and manage your orders at ViralClothes.Shop">
+  <meta name="twitter:image" content="/assets/og-image.jpg">
+  <link rel="canonical" href="/orders.html">
+  <meta name="robots" content="noindex, follow">
+  <link rel="manifest" href="/seo/manifest.json">
+  <meta name="theme-color" content="#1a1a2e">
+  <script id="seo-data" type="application/json">{"title":"My Orders - ViralClothes.Shop","description":"View and manage your orders at ViralClothes.Shop","ogImage":"/assets/og-image.jpg","ogType":"website","robots":"noindex, follow"}</script>
+  <script src="js/seo.js" defer></script>
+</head>
+<body>
+<div class="bg-animation"><span></span><span></span><span></span><span></span></div>
+<header id="header">
+  <a href="index.html" class="logo"><i class="fas fa-crown"></i> VIRAL<span>CLOTHES.SHOP</span></a>
+  <nav>
+    <a href="index.html">Home</a><a href="collection.html">Shop</a><a href="about.html">About</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
+  </nav>
+  <div class="header-actions">
+    <i class="fas fa-search" onclick="window.location.href='search.html'"></i>
+    <a href="wishlist.html"><i class="fas fa-heart"></i></a>
+    <div class="cart-btn" onclick="toggleCart()"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCount">0</span></div>
+    <div class="hamburger" onclick="document.querySelector('nav').classList.toggle('open')"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> <span>My Orders</span></div>
+  <h1>My <span>Orders</span></h1>
+  <p>View, track, and manage your orders</p>
+</div>
+
+<section>
+  <div id="ordersContainer">
+    <div style="text-align:center;padding:60px 20px">
+      <i class="fas fa-spinner fa-spin" style="font-size:32px;color:#6C3CE1"></i>
+      <p style="margin-top:15px;color:rgba(255,255,255,0.4)">Loading your orders...</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <a href="index.html" class="logo" style="font-size:22px;margin-bottom:15px;display:inline-block;"><i class="fas fa-crown"></i> VIRAL<span style="font-size:10px;display:block;-webkit-text-fill-color:initial;color:rgba(255,255,255,0.5);">CLOTHES.SHOP</span></a>
+      <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;">Your destination for premium streetwear and fashion.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a><a href="collection.html">Shop All</a><a href="collection.html?category=new">New Arrivals</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="faq.html">FAQ</a><a href="shipping-policy.html">Shipping Info</a><a href="refund-policy.html">Returns</a><a href="contact.html">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Policies</h4>
+      <a href="privacy-policy.html">Privacy Policy</a><a href="terms-conditions.html">Terms &amp; Conditions</a><a href="refund-policy.html">Refund Policy</a><a href="shipping-policy.html">Shipping Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 ViralClothes.Shop &mdash; All Rights Reserved. Made with ❤️</p></div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <h2>Shopping Cart <i class="fas fa-times" onclick="toggleCart()"></i></h2>
+  <div class="cart-items" id="cartItems"><div class="empty-cart"><i class="fas fa-shopping-bag"></i><p>Your cart is empty</p></div></div>
+  <div class="cart-total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+  <button class="checkout-btn" onclick="checkout()">Checkout <i class="fas fa-arrow-right"></i></button>
+</div>
+
+<div class="modal-overlay" id="orderModal">
+  <div class="modal-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="margin:0">Order Details</h2>
+      <i class="fas fa-times" onclick="closeOrderModal()" style="cursor:pointer;font-size:20px;color:rgba(255,255,255,0.4)"></i>
+    </div>
+    <div id="orderDetailContent"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+<script>
+async function loadOrders() {
+  if (!api.isLoggedIn()) {
+    document.getElementById('ordersContainer').innerHTML = `
+      <div style="text-align:center;padding:60px 20px">
+        <i class="fas fa-user-lock" style="font-size:48px;color:rgba(255,255,255,0.3);margin-bottom:15px"></i>
+        <h2>Sign In Required</h2>
+        <p style="color:rgba(255,255,255,0.4);margin-bottom:20px">Please sign in to view your orders</p>
+        <button class="btn btn-primary" onclick="showAuthModal()">Sign In</button>
+        <a href="index.html" class="btn btn-secondary" style="margin-left:10px">Go Home</a>
+      </div>`;
+    return;
+  }
+  try {
+    const data = await api.getOrders();
+    const orders = data.orders || [];
+    const container = document.getElementById('ordersContainer');
+    if (orders.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center;padding:60px 20px">
+          <i class="fas fa-shopping-bag" style="font-size:48px;color:rgba(255,255,255,0.3);margin-bottom:15px"></i>
+          <h2>No Orders Yet</h2>
+          <p style="color:rgba(255,255,255,0.4);margin-bottom:20px">Start shopping to see your orders here</p>
+          <a href="collection.html" class="btn btn-primary">Start Shopping <i class="fas fa-arrow-right"></i></a>
+        </div>`;
+      return;
+    }
+    container.innerHTML = orders.map(o => {
+      const statusClass = 'status-' + (o.orderStatus || 'pending');
+      const itemsHtml = (o.items || []).map(i =>
+        `<div class="order-item-icon">${i.icon || '📦'}</div>`
+      ).join('');
+      return `<div class="order-card" onclick="viewOrder('${o._id}')">
+        <div class="order-header">
+          <div>
+            <span class="order-number">${o.orderNumber}</span>
+            <span style="color:rgba(255,255,255,0.3);margin-left:10px;font-size:14px">${new Date(o.createdAt).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}</span>
+          </div>
+          <span class="order-status ${statusClass}">${(o.orderStatus||'Pending').toUpperCase()}</span>
+        </div>
+        <div class="order-items">${itemsHtml}</div>
+        <div class="order-footer">
+          <span style="color:rgba(255,255,255,0.4)">${(o.items||[]).length} item${(o.items||[]).length !== 1 ? 's' : ''}</span>
+          <span class="order-total">$${(o.total || 0).toFixed(2)}</span>
+        </div>
+        ${o.trackingNumber ? `<div style="margin-top:8px;font-size:13px;color:#00D2FF"><i class="fas fa-truck"></i> Tracking: ${o.trackingNumber}</div>` : ''}
+      </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('ordersContainer').innerHTML = `<div style="text-align:center;padding:60px 20px;color:#FF6B6B"><i class="fas fa-exclamation-circle" style="font-size:48px;margin-bottom:15px"></i><p>${e.message}</p></div>`;
+  }
+}
+
+async function viewOrder(id) {
+  try {
+    const data = await api.getOrder(id);
+    const o = data.order;
+    const modal = document.getElementById('orderModal');
+    const content = document.getElementById('orderDetailContent');
+    const statusClass = 'status-' + (o.orderStatus || 'pending');
+    const itemsHtml = (o.items || []).map(i => `
+      <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+        <div style="width:40px;height:40px;border-radius:6px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:20px">${i.icon || '📦'}</div>
+        <div style="flex:1"><strong>${i.name}</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.4)">Qty: ${i.quantity} x $${(i.price || 0).toFixed(2)}</span></div>
+        <div><strong>$${((i.price||0) * (i.quantity||0)).toFixed(2)}</strong></div>
+      </div>
+    `).join('');
+    const timelineHtml = (o.statusHistory || []).map(h => `
+      <div class="timeline-item done">
+        <strong style="text-transform:capitalize">${h.status}</strong><br>
+        <span style="font-size:13px;color:rgba(255,255,255,0.4)">${new Date(h.date).toLocaleString()} ${h.note ? '- ' + h.note : ''}</span>
+      </div>
+    `).join('');
+
+    content.innerHTML = `
+      <div class="order-header" style="margin-bottom:15px">
+        <div><span class="order-number">${o.orderNumber}</span></div>
+        <span class="order-status ${statusClass}">${(o.orderStatus||'Pending').toUpperCase()}</span>
+      </div>
+      <div style="margin:15px 0">
+        <strong>Items</strong>
+        <div style="margin-top:8px">${itemsHtml}</div>
+      </div>
+      <div style="margin:15px 0">
+        <strong>Shipping To</strong>
+        <p style="color:rgba(255,255,255,0.6);font-size:14px;margin-top:4px">
+          ${o.shippingAddress?.fullName || ''}<br>
+          ${o.shippingAddress?.street || ''}${o.shippingAddress?.apartment ? ', ' + o.shippingAddress.apartment : ''}<br>
+          ${o.shippingAddress?.city || ''}, ${o.shippingAddress?.state || ''} ${o.shippingAddress?.zip || ''}
+        </p>
+      </div>
+      <div class="summary-row"><span>Subtotal</span><span>$${(o.subtotal || 0).toFixed(2)}</span></div>
+      <div class="summary-row"><span>Shipping</span><span>${o.shippingCost === 0 ? 'FREE' : '$' + (o.shippingCost || 0).toFixed(2)}</span></div>
+      <div class="summary-row"><span>Tax</span><span>$${(o.taxAmount || 0).toFixed(2)}</span></div>
+      ${o.discountAmount ? `<div class="summary-row" style="color:#00D2FF"><span>Discount</span><span>-$${o.discountAmount.toFixed(2)}</span></div>` : ''}
+      <div class="summary-row total" style="border:none;font-size:20px;padding-top:10px"><span>Total</span><span>$${(o.total || 0).toFixed(2)}</span></div>
+      <div style="margin:15px 0"><strong>Payment</strong><br><span style="color:rgba(255,255,255,0.6);font-size:14px">${o.paymentMethod || 'N/A'} | ${o.paymentStatus || 'N/A'}</span></div>
+      ${o.trackingNumber ? `<div style="margin:15px 0;padding:12px;background:rgba(0,210,255,0.08);border-radius:8px"><i class="fas fa-truck"></i> <strong>Tracking:</strong> ${o.trackingNumber}${o.trackingUrl ? ` (<a href="${o.trackingUrl}" target="_blank" style="color:#00D2FF">Track</a>)` : ''}</div>` : ''}
+      <div style="margin:15px 0"><strong>Order Timeline</strong><div class="timeline" style="margin-top:10px">${timelineHtml || '<p style="color:rgba(255,255,255,0.3)">No history available</p>'}</div></div>
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+        <a href="checkout.html?order=${o._id}" class="btn btn-secondary" style="display:none">Reorder</a>
+        ${['pending','confirmed','processing'].includes(o.orderStatus) ? `<button class="btn btn-danger" onclick="cancelOrderFromModal('${o._id}')">Cancel Order</button>` : ''}
+        ${o.orderStatus === 'delivered' ? `<button class="btn btn-secondary" onclick="returnOrderFromModal('${o._id}')">Request Return</button>` : ''}
+      </div>
+    `;
+    modal.classList.add('open');
+  } catch(e) { showToast(e.message); }
+}
+
+function closeOrderModal() {
+  document.getElementById('orderModal').classList.remove('open');
+}
+
+async function cancelOrderFromModal(id) {
+  if (!confirm('Are you sure you want to cancel this order?')) return;
+  try {
+    await api.cancelOrder(id);
+    showToast('Order cancelled');
+    closeOrderModal();
+    loadOrders();
+  } catch(e) { showToast(e.message); }
+}
+
+async function returnOrderFromModal(id) {
+  const reason = prompt('Please enter the reason for return:');
+  if (!reason) return;
+  try {
+    await api.returnOrder(id, reason);
+    showToast('Return requested');
+    closeOrderModal();
+    loadOrders();
+  } catch(e) { showToast(e.message); }
+}
+
+document.addEventListener('DOMContentLoaded', loadOrders);
+</script>
+</body>
+</html>

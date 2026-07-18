@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>ViralClothes.Shop - Trendy Fashion & Streetwear</title>
+  <meta name="description" content="Discover the latest trends in streetwear and fashion. Premium quality clothes at ViralClothes.Shop.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <meta property="og:title" content="ViralClothes.Shop - Trendy Fashion & Streetwear">
+  <meta property="og:description" content="Discover the latest trends in streetwear and fashion. Premium quality clothes at ViralClothes.Shop.">
+  <meta property="og:image" content="/assets/og-image.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ViralClothes.Shop - Trendy Fashion & Streetwear">
+  <meta name="twitter:description" content="Discover the latest trends in streetwear and fashion. Premium quality clothes at ViralClothes.Shop.">
+  <meta name="twitter:image" content="/assets/og-image.jpg">
+  <link rel="canonical" href="/">
+  <meta name="robots" content="index, follow">
+  <link rel="manifest" href="/seo/manifest.json">
+  <meta name="theme-color" content="#1a1a2e">
+  <script id="seo-data" type="application/json">{"title":"ViralClothes.Shop - Trendy Fashion & Streetwear","description":"Discover the latest trends in streetwear and fashion. Premium quality clothes at ViralClothes.Shop.","ogImage":"/assets/og-image.jpg","ogType":"website","robots":"index, follow","keywords":"streetwear, fashion, clothing, hoodies, t-shirts, sneakers, online shopping"}</script>
+  <script src="js/seo.js" defer></script>
+</head>
+<body>
+
+<div class="bg-animation">
+  <span></span><span></span><span></span><span></span>
+</div>
+
+<header id="header">
+  <a href="index.html" class="logo">
+    <i class="fas fa-crown"></i> VIRAL<span>CLOTHES.SHOP</span>
+  </a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="collection.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <div class="header-actions">
+    <i class="fas fa-search" onclick="window.location.href='search.html'"></i>
+    <a href="wishlist.html"><i class="fas fa-heart"></i></a>
+    <div class="cart-btn" onclick="toggleCart()">
+      <i class="fas fa-shopping-bag"></i>
+      <span class="cart-count" id="cartCount">0</span>
+    </div>
+    <div class="hamburger" onclick="document.querySelector('nav').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<section class="hero-slider" id="home">
+  <div class="slide active">
+    <div class="hero-content">
+      <div class="hero-badge">New Collection 2026</div>
+      <h1>Dress to <span class="highlight">Impress</span><br>Stand Out Every Day</h1>
+      <p>Discover the latest trends in streetwear and fashion. Premium quality clothes that make you feel confident.</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="window.location.href='collection.html'">Shop Now <i class="fas fa-arrow-right"></i></button>
+        <button class="btn btn-secondary" onclick="window.location.href='about.html'">Explore <i class="fas fa-play"></i></button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card">
+        <img src="assets/images/hero_new_collection.png" alt="New Collection" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">
+      </div>
+      <div class="floating-badge" style="top:15%;right:5%;">&#x2B50; 4.9 Rating</div>
+      <div class="floating-badge" style="bottom:25%;left:5%;">&#x1F69A; Free Shipping</div>
+    </div>
+  </div>
+  <div class="slide">
+    <div class="hero-content">
+      <div class="hero-badge">Limited Edition</div>
+      <h1>Summer <span class="highlight">Collection</span><br>2026</h1>
+      <p>Beat the heat with our exclusive summer collection. Lightweight fabrics, bold colors, unlimited style.</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="window.location.href='collection.html'">Shop Now <i class="fas fa-arrow-right"></i></button>
+        <button class="btn btn-secondary" onclick="window.location.href='about.html'">Learn More <i class="fas fa-info"></i></button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card" style="background: var(--gradient2);">
+        <img src="assets/images/hero_summer_collection.png" alt="Summer Collection" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">
+      </div>
+      <div class="floating-badge" style="top:15%;right:5%;">&#x2600;&#xFE0F; Summer Vibes</div>
+      <div class="floating-badge" style="bottom:25%;left:5%;">-40% OFF</div>
+    </div>
+  </div>
+  <div class="slide">
+    <div class="hero-content">
+      <div class="hero-badge">Best Sellers</div>
+      <h1>Premium <span class="highlight">Streetwear</span><br>For Everyone</h1>
+      <p>From casual to classy, we have everything you need. Quality guaranteed with every purchase.</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="window.location.href='collection.html'">Shop Now <i class="fas fa-arrow-right"></i></button>
+        <button class="btn btn-secondary" onclick="window.location.href='collection.html'">View Lookbook <i class="fas fa-images"></i></button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card" style="background: var(--gradient3);">
+        <img src="assets/images/hero_premium_streetwear.png" alt="Premium Streetwear" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">
+      </div>
+      <div class="floating-badge" style="top:15%;right:5%;">&#x1F3AF; 10K+ Sold</div>
+      <div class="floating-badge" style="bottom:25%;left:5%;">&#x1F4AF; Premium Quality</div>
+    </div>
+  </div>
+  <div class="slider-dots">
+    <span class="dot active"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+  <div class="slider-arrows">
+    <button><i class="fas fa-chevron-left"></i></button>
+    <button><i class="fas fa-chevron-right"></i></button>
+  </div>
+</section>
+
+<section id="products">
+  <div class="section-header reveal">
+    <h2>Trending <span>Now</span></h2>
+    <p>Most popular items chosen by our customers this month</p>
+  </div>
+  <div class="categories reveal">
+    <button class="cat-btn active" data-cat="all">All</button>
+    <button class="cat-btn" data-cat="tshirts">T-Shirts</button>
+    <button class="cat-btn" data-cat="hoodies">Hoodies</button>
+    <button class="cat-btn" data-cat="shoes">Shoes</button>
+    <button class="cat-btn" data-cat="accessories">Accessories</button>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<section id="features">
+  <div class="section-header reveal">
+    <h2>Why <span>Choose Us</span></h2>
+    <p>We go above and beyond to make your shopping experience unforgettable</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <i class="fas fa-truck-fast" style="color: var(--accent);"></i>
+      <h3>Free Shipping</h3>
+      <p>Free shipping on all orders over $50. Fast delivery worldwide.</p>
+    </div>
+    <div class="feature-card reveal">
+      <i class="fas fa-shield-halved" style="color: #00D2FF;"></i>
+      <h3>Secure Payment</h3>
+      <p>100% secure checkout with encrypted payment processing.</p>
+    </div>
+    <div class="feature-card reveal">
+      <i class="fas fa-rotate-left" style="color: var(--accent);"></i>
+      <h3>Easy Returns</h3>
+      <p>30-day hassle-free return policy. No questions asked.</p>
+    </div>
+    <div class="feature-card reveal">
+      <i class="fas fa-headset" style="color: var(--secondary);"></i>
+      <h3>24/7 Support</h3>
+      <p>Our support team is available around the clock to help you.</p>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="section-header reveal">
+    <h2>What <span>Customers Say</span></h2>
+    <p>Join thousands of happy customers worldwide</p>
+  </div>
+  <div class="testimonials-slider reveal">
+    <div class="testimonial-track" id="testimonialTrack">
+      <div class="testimonial">
+        <div class="avatar" style="background: var(--gradient1);">&#x1F469;</div>
+        <p>"Absolutely love my new hoodie! The quality is incredible and the fit is perfect. Shipping was super fast too!"</p>
+        <h4>Sarah Johnson</h4>
+        <span class="role">Verified Buyer</span>
+        <div style="color: var(--accent); margin-top: 10px;">&#x2B50;&#x2B50;&#x2B50;&#x2B50;&#x2B50;</div>
+      </div>
+      <div class="testimonial">
+        <div class="avatar" style="background: var(--gradient2);">&#x1F468;</div>
+        <p>"Best online shopping experience I've ever had. The website is beautiful and the clothes are even better in person!"</p>
+        <h4>Mike Chen</h4>
+        <span class="role">Verified Buyer</span>
+        <div style="color: var(--accent); margin-top: 10px;">&#x2B50;&#x2B50;&#x2B50;&#x2B50;&#x2B50;</div>
+      </div>
+      <div class="testimonial">
+        <div class="avatar" style="background: var(--gradient3);">&#x1F469;&#x200D;&#x1F469;</div>
+        <p>"I've been shopping here for months and I'm never disappointed. The new collection is fire!"</p>
+        <h4>Emma Rodriguez</h4>
+        <span class="role">VIP Member</span>
+        <div style="color: var(--accent); margin-top: 10px;">&#x2B50;&#x2B50;&#x2B50;&#x2B50;&#x2B50;</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:10px;margin-top:20px;">
+      <span class="dot" style="background:var(--primary);width:35px;border-radius:6px;height:12px;cursor:pointer;"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="newsletter reveal">
+    <h2>Stay in the Loop</h2>
+    <p>Subscribe for exclusive deals, new arrivals, and 10% off your first order!</p>
+    <form>
+      <input type="email" placeholder="Enter your email" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <a href="index.html" class="logo" style="font-size:22px;margin-bottom:15px;display:inline-block;">
+        <i class="fas fa-crown"></i> VIRAL<span style="font-size:10px;display:block;-webkit-text-fill-color:initial;color:rgba(255,255,255,0.5);">CLOTHES.SHOP</span>
+      </a>
+      <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;">Your destination for premium streetwear and fashion. Trendy styles, unbeatable quality.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a>
+      <a href="collection.html">Shop All</a>
+      <a href="collection.html?category=new">New Arrivals</a>
+      <a href="collection.html?category=tshirts">Best Sellers</a>
+      <a href="collection.html?category=hoodies">Sale</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="faq.html">FAQ</a>
+      <a href="shipping-policy.html">Shipping Info</a>
+      <a href="refund-policy.html">Returns</a>
+      <a href="contact.html">Size Guide</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Policies</h4>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-conditions.html">Terms &amp; Conditions</a>
+      <a href="refund-policy.html">Refund Policy</a>
+      <a href="shipping-policy.html">Shipping Policy</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p><i class="fas fa-envelope"></i> hello@viralclothes.shop</p>
+      <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+      <p><i class="fas fa-map-marker-alt"></i> New York, USA</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 ViralClothes.Shop &mdash; All Rights Reserved. Made with ❤️</p>
+  </div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <h2>Shopping Cart <i class="fas fa-times" onclick="toggleCart()"></i></h2>
+  <div class="cart-items" id="cartItems">
+    <div class="empty-cart">
+      <i class="fas fa-shopping-bag"></i>
+      <p>Your cart is empty</p>
+    </div>
+  </div>
+  <div class="cart-total">
+    <span>Total</span>
+    <span id="cartTotal">$0.00</span>
+  </div>
+  <button class="checkout-btn" onclick="checkout()">Checkout <i class="fas fa-arrow-right"></i></button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
