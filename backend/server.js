@@ -53,6 +53,18 @@ app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'ViralClothes API is running', timestamp: new Date().toISOString() });
 });
 
+// One-time seed endpoint
+app.post('/api/seed', async (req, res) => {
+  if (req.query.key !== 'viralclothes_seed_2026') return res.status(401).json({ success: false, message: 'Invalid key' });
+  try {
+    const { seed } = require('./src/seeds/seed');
+    await seed();
+    res.json({ success: true, message: 'Database seeded successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);

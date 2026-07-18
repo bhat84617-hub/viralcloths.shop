@@ -1,7 +1,7 @@
 require('dotenv').config({ path: require('path').join(__dirname, '../../.env') });
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const connectDB = require('../config/db');
+const { connectDB } = require('../config/db');
 const User = require('../models/User');
 const Category = require('../models/Category');
 const Brand = require('../models/Brand');
@@ -105,4 +105,8 @@ const seed = async () => {
   process.exit(0);
 };
 
-seed().catch(err => { console.error(err); process.exit(1); });
+if (require.main === module) {
+  seed().catch(err => { console.error(err); process.exit(1); });
+}
+
+module.exports = { seed };
