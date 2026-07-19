@@ -16,7 +16,10 @@ let PRODUCTS = [
 async function loadProductsFromAPI() {
   try {
     if (typeof api === 'undefined' || !api.getProducts) return;
-    const data = await api.getProducts({ limit: 100 });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const data = await api.request('/products?limit=100', { signal: controller.signal });
+    clearTimeout(timeout);
     if (data && data.products && data.products.length > 0) {
       PRODUCTS = data.products.map((p, i) => ({
         id: p._id || p.id || (i + 1),

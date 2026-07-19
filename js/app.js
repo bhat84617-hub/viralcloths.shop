@@ -5,23 +5,11 @@ function initApp() {
   loadCart();
   updateCartUI();
 
-  initHeaderScroll();
-  initMobileMenu();
-  initBackToTop();
-  initSlider();
-  initTestimonials();
-  observeReveal();
-  initNewsletter();
-  initSearch();
-  initWishlistButtons();
+  const inits = { initHeaderScroll, initMobileMenu, initBackToTop, initSlider, initTestimonials, observeReveal, initNewsletter, initSearch, initWishlistButtons };
+  for (const fn of Object.values(inits)) { try { fn(); } catch(e) { console.log(e); } }
 
   if (document.getElementById('productsGrid')) {
-    loadProductsFromAPI().then(() => {
-      renderProducts();
-      syncCartToServer();
-    }).catch(() => {
-      renderProducts();
-    });
+    loadProductsFromAPI().then(() => { renderProducts(); syncCartToServer(); }).catch(() => { renderProducts(); });
   }
 
   if (document.getElementById('faqContainer')) {
@@ -430,10 +418,16 @@ function initProductDetail() {
       <div class="rating">${'⭐'.repeat(Math.floor(product.rating))} <span>(${product.rating} · ${product.reviews} reviews)</span></div>
       <div class="price">$${product.price.toFixed(2)} ${product.oldPrice ? `<span class="old">$${product.oldPrice.toFixed(2)}</span>` : ''}</div>
       <p class="description">${product.description}</p>
+      <div class="color-selector">
+        <h4>Select Color</h4>
+        <div class="colors">
+          ${(product.colors||[]).map(c => `<button class="color-btn" style="background:${c}" onclick="this.closest('.colors').querySelectorAll('.color-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')"></button>`).join('')}
+        </div>
+      </div>
       <div class="size-selector">
         <h4>Select Size</h4>
         <div class="sizes">
-          ${product.sizes.map(s => `<button class="size-btn" onclick="this.closest('.sizes').querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">${s}</button>`).join('')}
+          ${(product.sizes||[]).map(s => `<button class="size-btn" onclick="this.closest('.sizes').querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">${s}</button>`).join('')}
         </div>
       </div>
       <div class="qty-selector">
@@ -625,6 +619,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartUI, clearCart
   };
 
-  initApp();
-  if (document.getElementById('collectionGrid')) initCollection();
+  try { initApp(); } catch(e) { console.log('initApp error:', e); }
+  try { if (document.getElementById('collectionGrid')) initCollection(); } catch(e) { console.log('initCollection error:', e); }
 });
