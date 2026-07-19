@@ -53,6 +53,16 @@ app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'ViralClothes API is running', timestamp: new Date().toISOString() });
 });
 
+// Diagnostic endpoint
+app.get('/api/debug', (req, res) => {
+  const { getDBStatus } = require('./src/config/db');
+  res.json({
+    dbConnected: getDBStatus(),
+    mongoUriSet: !!(process.env.MONGO_URI || process.env.MONGODB_URI),
+    nodeEnv: process.env.NODE_ENV
+  });
+});
+
 // One-time seed endpoint
 app.post('/api/seed', async (req, res) => {
   if (req.query.key !== 'viralclothes_seed_2026') return res.status(401).json({ success: false, message: 'Invalid key' });
